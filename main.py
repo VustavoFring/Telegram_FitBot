@@ -1,3 +1,4 @@
+import data_file
 import telebot
 # токен для бота
 token = '7031939959:AAFOYF-nB-3_37yvr0Q7cXT1NnAf3MW-yvw'

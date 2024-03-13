@@ -27,11 +27,11 @@ class Exercise:
         return description
 
     def add_exercise(self, title, image, description, group_muscle, difficulty, availability, energy_cost):
-        self.cur.execute("INSERT INTO exercises(title, image, description, group_muscle, difficulty, availability, energy_cost) VALUES (?, ?, ?, ?, ?, ?, ?)", (title, image, description, group_muscle, difficulty, availability, energy_cost))
+        self.cur.execute("INSERT INTO exercises(title, image, description, group_muscle, difficulty, availability,) VALUES (?, ?, ?, ?, ?, ?, ?)", (title, image, description, group_muscle, difficulty, availability, energy_cost))
         self.conn.commit()
 
     def update_exercise(self, exercise_id, title, image, description, group_muscle, difficulty, availability, energy_cost):
-        self.cur.execute("UPDATE exercises SET title=?, image=?, description=?, group_muscle=?, difficulty=?, availability=?, energy_cost=? WHERE id=?", (title, image, description, group_muscle, difficulty, availability, energy_cost, exercise_id))
+        self.cur.execute("UPDATE exercises SET title=?, image=?, description=?, group_muscle=?, difficulty=?, availability=? WHERE id=?", (title, image, description, group_muscle, difficulty, availability, energy_cost, exercise_id))
         self.conn.commit()
 
     def delete_exercise(self, exercise_id):

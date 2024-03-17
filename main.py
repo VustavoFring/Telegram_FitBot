@@ -167,7 +167,7 @@ def aft_click1(message):
 
     if message.text == 'Информация о боте':
         markup =types.ReplyKeyboardMarkup()
-        butn_back=types.KeyboardButton('Назад')
+        butn_back=types.KeyboardButton('⬅️Назад')
         bot_information_text = 'Здравствуйте, этот бот - ваш персональный фитнесс ассистент, он сможет помочь вам в подборе тренировочного плана и упражнений.\n\nЭтот бот создат в качестве итогового проекта, является всего лишь помощником и не гарантирует 100-процентного результата, если у вас имеются проблемы со здоровьем, то перед выполнением технически сложных упражнений рекомендуется проконсультироваться со специалистом.'
         markup.row(butn_back)
         bot.send_message(message.chat.id, bot_information_text, reply_markup=markup)
@@ -181,19 +181,19 @@ def aft_click1(message):
         butn5=types.KeyboardButton('Упражнения на руки')
         butn6=types.KeyboardButton('Упражнения на плечи')
         butn7=types.KeyboardButton('Кардио упражнения')
-        butn_back=types.KeyboardButton('Назад')
+        butn_back=types.KeyboardButton('⬅️Назад')
         markup.row(butn1, butn2)
         markup.row(butn3, butn4)
         markup.row(butn5, butn6)
         markup.row(butn7, butn_back)
         bot.send_message(message.chat.id,'Выберете желаемый тип упражнений по группам мышц', reply_markup=markup)
 
-    elif message.text == 'Назад':
+    elif message.text == '⬅️Назад':
         markup =types.ReplyKeyboardMarkup()
         butn1=types.KeyboardButton('Каталог упражнений')
         butn2=types.KeyboardButton('Информация о боте')
         markup.row(butn1, butn2)
-        bot.send_message(message.chat.id, 'Назад', reply_markup=markup)
+        bot.send_message(message.chat.id, '⬅️Назад', reply_markup=markup)
 
 
 
@@ -202,7 +202,7 @@ def aft_click1(message):
         butn1=types.KeyboardButton('Нет никакого инвентаря')
         butn2=types.KeyboardButton('Есть гантели или гири')
         butn3=types.KeyboardButton('Хожу в тренажерный зал')
-        butn_back=types.KeyboardButton('Назад к типам упражнений')
+        butn_back=types.KeyboardButton('⬅️Назад к типам упражнений')
         markup.row(butn1, butn2, butn3)
         markup.row(butn_back)
         bot.send_message(message.chat.id,'Выберите тип вашего инвентаря', reply_markup=markup)
@@ -213,7 +213,7 @@ def aft_click1(message):
         butn1=types.KeyboardButton('Нет никакого инвентаря')
         butn2=types.KeyboardButton('Есть гантели или гири')
         butn3=types.KeyboardButton('Хожу в тренажерный зал')
-        butn_back=types.KeyboardButton('Назад к типам упражнений')
+        butn_back=types.KeyboardButton('⬅️Назад к типам упражнений')
         markup.row(butn1, butn2, butn3)
         markup.row(butn_back)
         bot.send_message(message.chat.id,'Выберите тип вашего инвентаря', reply_markup=markup)
@@ -224,7 +224,7 @@ def aft_click1(message):
         butn1=types.KeyboardButton('Нет никакого инвентаря')
         butn2=types.KeyboardButton('Есть гантели или гири')
         butn3=types.KeyboardButton('Хожу в тренажерный зал')
-        butn_back=types.KeyboardButton('Назад к типам упражнений')
+        butn_back=types.KeyboardButton('⬅️Назад к типам упражнений')
         markup.row(butn1, butn2, butn3)
         markup.row(butn_back)
         bot.send_message(message.chat.id,'Выберите тип вашего инвентаря', reply_markup=markup)
@@ -235,7 +235,7 @@ def aft_click1(message):
         butn1=types.KeyboardButton('Нет никакого инвентаря')
         butn2=types.KeyboardButton('Есть гантели или гири')
         butn3=types.KeyboardButton('Хожу в тренажерный зал')
-        butn_back=types.KeyboardButton('Назад к типам упражнений')
+        butn_back=types.KeyboardButton('⬅️Назад к типам упражнений')
         markup.row(butn1, butn2, butn3)
         markup.row(butn_back)
         bot.send_message(message.chat.id,'Выберите тип вашего инвентаря', reply_markup=markup)
@@ -246,7 +246,7 @@ def aft_click1(message):
         butn1=types.KeyboardButton('Нет никакого инвентаря')
         butn2=types.KeyboardButton('Есть гантели или гири')
         butn3=types.KeyboardButton('Хожу в тренажерный зал')
-        butn_back=types.KeyboardButton('Назад к типам упражнений')
+        butn_back=types.KeyboardButton('⬅️Назад к типам упражнений')
         markup.row(butn1, butn2, butn3)
         markup.row(butn_back)
         bot.send_message(message.chat.id,'Выберите тип вашего инвентаря', reply_markup=markup)
@@ -257,7 +257,7 @@ def aft_click1(message):
         butn1=types.KeyboardButton('Нет никакого инвентаря')
         butn2=types.KeyboardButton('Есть гантели или гири')
         butn3=types.KeyboardButton('Хожу в тренажерный зал')
-        butn_back=types.KeyboardButton('Назад к типам упражнений')
+        butn_back=types.KeyboardButton('⬅️Назад к типам упражнений')
         markup.row(butn1, butn2, butn3)
         markup.row(butn_back)
         bot.send_message(message.chat.id,'Выберите тип вашего инвентаря', reply_markup=markup)
@@ -265,7 +265,7 @@ def aft_click1(message):
 
 
 
-    elif message.text == 'Назад к типам упражнений':
+    elif message.text == '⬅️Назад к типам упражнений':
         markup =types.ReplyKeyboardMarkup()
         butn1=types.KeyboardButton('Упражнения на ноги')
         butn2=types.KeyboardButton('Упражнения на спину')
@@ -274,18 +274,18 @@ def aft_click1(message):
         butn5=types.KeyboardButton('Упражнения на руки')
         butn6=types.KeyboardButton('Упражнения на плечи')
         butn7=types.KeyboardButton('Кардио упражнения')
-        butn_back=types.KeyboardButton('Назад')
+        butn_back=types.KeyboardButton('⬅️Назад')
         markup.row(butn1, butn2)
         markup.row(butn3, butn4)
         markup.row(butn5, butn6)
         markup.row(butn7, butn_back)
-        bot.send_message(message.chat.id,'Назад к типам упражнений', reply_markup=markup)
+        bot.send_message(message.chat.id,'⬅️Назад к типам упражнений', reply_markup=markup)
 
 
 def list_of_legs_exercises(message):
     if message.text == 'Нет никакого инвентаря':
         markup =types.ReplyKeyboardMarkup()
-        butn_back=types.KeyboardButton('Назад к типам упражнений')
+        butn_back=types.KeyboardButton('⬅️Назад к типам упражнений')
         markup.row(butn_back)
         exercise_images1 = exercise_manager.get_legs_exercise_image_by_availability(('1'))
         exercise_descriptions1 = exercise_manager.get_legs_exercise_description_by_availability(('1'))
@@ -298,7 +298,7 @@ def list_of_legs_exercises(message):
             bot.send_photo(message.chat.id, exercise_image1, exercise_description1, reply_markup=markup)
     elif message.text == 'Есть гантели или гири':
         markup =types.ReplyKeyboardMarkup()
-        butn_back=types.KeyboardButton('Назад к типам упражнений')
+        butn_back=types.KeyboardButton('⬅️Назад к типам упражнений')
         markup.row(butn_back)
         exercise_images2 = exercise_manager.get_legs_exercise_image_by_availability(('2'))
         exercise_descriptions2 = exercise_manager.get_legs_exercise_description_by_availability(('2'))
@@ -311,7 +311,7 @@ def list_of_legs_exercises(message):
             bot.send_photo(message.chat.id, exercise_image2, exercise_description2, reply_markup=markup)
     elif message.text == 'Хожу в тренажерный зал':
         markup =types.ReplyKeyboardMarkup()
-        butn_back=types.KeyboardButton('Назад к типам упражнений')
+        butn_back=types.KeyboardButton('⬅️Назад к типам упражнений')
         markup.row(butn_back)
         exercise_images3 = exercise_manager.get_legs_exercise_image_by_availability(('3'))
         exercise_descriptions3 = exercise_manager.get_legs_exercise_description_by_availability(('3'))
@@ -323,7 +323,7 @@ def list_of_legs_exercises(message):
             z+=1
             bot.send_photo(message.chat.id, exercise_image3, exercise_description3, reply_markup=markup)
 
-    elif message.text == 'Назад к типам упражнений':
+    elif message.text == '⬅️Назад к типам упражнений':
         markup =types.ReplyKeyboardMarkup()
         butn1=types.KeyboardButton('Упражнения на ноги')
         butn2=types.KeyboardButton('Упражнения на спину')
@@ -332,18 +332,18 @@ def list_of_legs_exercises(message):
         butn5=types.KeyboardButton('Упражнения на руки')
         butn6=types.KeyboardButton('Упражнения на плечи')
         butn7=types.KeyboardButton('Кардио упражнения')
-        butn_back=types.KeyboardButton('Назад')
+        butn_back=types.KeyboardButton('⬅️Назад')
         markup.row(butn1, butn2)
         markup.row(butn3, butn4)
         markup.row(butn5, butn6)
         markup.row(butn7, butn_back)
-        bot.send_message(message.chat.id,'Назад к типам упражнений', reply_markup=markup)
+        bot.send_message(message.chat.id,'⬅️Назад к типам упражнений', reply_markup=markup)
     
 
 def list_of_back_exercises(message):
     if message.text == 'Нет никакого инвентаря':
         markup =types.ReplyKeyboardMarkup()
-        butn_back=types.KeyboardButton('Назад к типам упражнений')
+        butn_back=types.KeyboardButton('⬅️Назад к типам упражнений')
         markup.row(butn_back)
         exercise_images1 = exercise_manager.get_back_exercise_image_by_availability(('1'))
         exercise_descriptions1 = exercise_manager.get_back_exercise_description_by_availability(('1'))
@@ -356,7 +356,7 @@ def list_of_back_exercises(message):
             bot.send_photo(message.chat.id, exercise_image1, exercise_description1, reply_markup=markup)
     elif message.text == 'Есть гантели или гири':
         markup =types.ReplyKeyboardMarkup()
-        butn_back=types.KeyboardButton('Назад к типам упражнений')
+        butn_back=types.KeyboardButton('⬅️Назад к типам упражнений')
         markup.row(butn_back)
         exercise_images2 = exercise_manager.get_back_exercise_image_by_availability(('2'))
         exercise_descriptions2 = exercise_manager.get_back_exercise_description_by_availability(('2'))
@@ -369,7 +369,7 @@ def list_of_back_exercises(message):
             bot.send_photo(message.chat.id, exercise_image2, exercise_description2, reply_markup=markup)
     elif message.text == 'Хожу в тренажерный зал':
         markup =types.ReplyKeyboardMarkup()
-        butn_back=types.KeyboardButton('Назад к типам упражнений')
+        butn_back=types.KeyboardButton('⬅️Назад к типам упражнений')
         markup.row(butn_back)
         exercise_images3 = exercise_manager.get_back_exercise_image_by_availability(('3'))
         exercise_descriptions3 = exercise_manager.get_back_exercise_description_by_availability(('3'))
@@ -381,7 +381,7 @@ def list_of_back_exercises(message):
             z+=1
             bot.send_photo(message.chat.id, exercise_image3, exercise_description3, reply_markup=markup)
 
-    elif message.text == 'Назад к типам упражнений':
+    elif message.text == '⬅️Назад к типам упражнений':
         markup =types.ReplyKeyboardMarkup()
         butn1=types.KeyboardButton('Упражнения на ноги')
         butn2=types.KeyboardButton('Упражнения на спину')
@@ -390,18 +390,18 @@ def list_of_back_exercises(message):
         butn5=types.KeyboardButton('Упражнения на руки')
         butn6=types.KeyboardButton('Упражнения на плечи')
         butn7=types.KeyboardButton('Кардио упражнения')
-        butn_back=types.KeyboardButton('Назад')
+        butn_back=types.KeyboardButton('⬅️Назад')
         markup.row(butn1, butn2)
         markup.row(butn3, butn4)
         markup.row(butn5, butn6)
         markup.row(butn7, butn_back)
-        bot.send_message(message.chat.id,'Назад к типам упражнений', reply_markup=markup)
+        bot.send_message(message.chat.id,'⬅️Назад к типам упражнений', reply_markup=markup)
 
 
 def list_of_core_exercises(message):
     if message.text == 'Нет никакого инвентаря':
         markup =types.ReplyKeyboardMarkup()
-        butn_back=types.KeyboardButton('Назад к типам упражнений')
+        butn_back=types.KeyboardButton('⬅️Назад к типам упражнений')
         markup.row(butn_back)
         exercise_images1 = exercise_manager.get_core_exercise_image_by_availability(('1'))
         exercise_descriptions1 = exercise_manager.get_core_exercise_description_by_availability(('1'))
@@ -414,7 +414,7 @@ def list_of_core_exercises(message):
             bot.send_photo(message.chat.id, exercise_image1, exercise_description1, reply_markup=markup)
     elif message.text == 'Есть гантели или гири':
         markup =types.ReplyKeyboardMarkup()
-        butn_back=types.KeyboardButton('Назад к типам упражнений')
+        butn_back=types.KeyboardButton('⬅️Назад к типам упражнений')
         markup.row(butn_back)
         exercise_images2 = exercise_manager.get_core_exercise_image_by_availability(('2'))
         exercise_descriptions2 = exercise_manager.get_core_exercise_description_by_availability(('2'))
@@ -427,7 +427,7 @@ def list_of_core_exercises(message):
             bot.send_photo(message.chat.id, exercise_image2, exercise_description2, reply_markup=markup)
     elif message.text == 'Хожу в тренажерный зал':
         markup =types.ReplyKeyboardMarkup()
-        butn_back=types.KeyboardButton('Назад к типам упражнений')
+        butn_back=types.KeyboardButton('⬅️Назад к типам упражнений')
         markup.row(butn_back)
         exercise_images3 = exercise_manager.get_core_exercise_image_by_availability(('3'))
         exercise_descriptions3 = exercise_manager.get_core_exercise_description_by_availability(('3'))
@@ -439,7 +439,7 @@ def list_of_core_exercises(message):
             z+=1
             bot.send_photo(message.chat.id, exercise_image3, exercise_description3, reply_markup=markup)
 
-    elif message.text == 'Назад к типам упражнений':
+    elif message.text == '⬅️Назад к типам упражнений':
         markup =types.ReplyKeyboardMarkup()
         butn1=types.KeyboardButton('Упражнения на ноги')
         butn2=types.KeyboardButton('Упражнения на спину')
@@ -448,18 +448,18 @@ def list_of_core_exercises(message):
         butn5=types.KeyboardButton('Упражнения на руки')
         butn6=types.KeyboardButton('Упражнения на плечи')
         butn7=types.KeyboardButton('Кардио упражнения')
-        butn_back=types.KeyboardButton('Назад')
+        butn_back=types.KeyboardButton('⬅️Назад')
         markup.row(butn1, butn2)
         markup.row(butn3, butn4)
         markup.row(butn5, butn6)
         markup.row(butn7, butn_back)
-        bot.send_message(message.chat.id,'Назад к типам упражнений', reply_markup=markup)
+        bot.send_message(message.chat.id,'⬅️Назад к типам упражнений', reply_markup=markup)
 
 
 def list_of_chest_exercises(message):
     if message.text == 'Нет никакого инвентаря':
         markup =types.ReplyKeyboardMarkup()
-        butn_back=types.KeyboardButton('Назад к типам упражнений')
+        butn_back=types.KeyboardButton('⬅️Назад к типам упражнений')
         markup.row(butn_back)
         exercise_images1 = exercise_manager.get_chest_exercise_image_by_availability(('1'))
         exercise_descriptions1 = exercise_manager.get_chest_exercise_description_by_availability(('1'))
@@ -472,7 +472,7 @@ def list_of_chest_exercises(message):
             bot.send_photo(message.chat.id, exercise_image1, exercise_description1, reply_markup=markup)
     elif message.text == 'Есть гантели или гири':
         markup =types.ReplyKeyboardMarkup()
-        butn_back=types.KeyboardButton('Назад к типам упражнений')
+        butn_back=types.KeyboardButton('⬅️Назад к типам упражнений')
         markup.row(butn_back)
         exercise_images2 = exercise_manager.get_chest_exercise_image_by_availability(('2'))
         exercise_descriptions2 = exercise_manager.get_chest_exercise_description_by_availability(('2'))
@@ -485,7 +485,7 @@ def list_of_chest_exercises(message):
             bot.send_photo(message.chat.id, exercise_image2, exercise_description2, reply_markup=markup)
     elif message.text == 'Хожу в тренажерный зал':
         markup =types.ReplyKeyboardMarkup()
-        butn_back=types.KeyboardButton('Назад к типам упражнений')
+        butn_back=types.KeyboardButton('⬅️Назад к типам упражнений')
         markup.row(butn_back)
         exercise_images3 = exercise_manager.get_chest_exercise_image_by_availability(('3'))
         exercise_descriptions3 = exercise_manager.get_chest_exercise_description_by_availability(('3'))
@@ -497,7 +497,7 @@ def list_of_chest_exercises(message):
             z+=1
             bot.send_photo(message.chat.id, exercise_image3, exercise_description3, reply_markup=markup)
 
-    elif message.text == 'Назад к типам упражнений':
+    elif message.text == '⬅️Назад к типам упражнений':
         markup =types.ReplyKeyboardMarkup()
         butn1=types.KeyboardButton('Упражнения на ноги')
         butn2=types.KeyboardButton('Упражнения на спину')
@@ -506,18 +506,18 @@ def list_of_chest_exercises(message):
         butn5=types.KeyboardButton('Упражнения на руки')
         butn6=types.KeyboardButton('Упражнения на плечи')
         butn7=types.KeyboardButton('Кардио упражнения')
-        butn_back=types.KeyboardButton('Назад')
+        butn_back=types.KeyboardButton('vНазад')
         markup.row(butn1, butn2)
         markup.row(butn3, butn4)
         markup.row(butn5, butn6)
         markup.row(butn7, butn_back)
-        bot.send_message(message.chat.id,'Назад к типам упражнений', reply_markup=markup)
+        bot.send_message(message.chat.id,'⬅️Назад к типам упражнений', reply_markup=markup)
 
 
 def list_of_arms_exercises(message):
     if message.text == 'Нет никакого инвентаря':
         markup =types.ReplyKeyboardMarkup()
-        butn_back=types.KeyboardButton('Назад к типам упражнений')
+        butn_back=types.KeyboardButton('⬅️Назад к типам упражнений')
         markup.row(butn_back)
         exercise_images1 = exercise_manager.get_arms_exercise_image_by_availability(('1'))
         exercise_descriptions1 = exercise_manager.get_arms_exercise_description_by_availability(('1'))
@@ -530,7 +530,7 @@ def list_of_arms_exercises(message):
             bot.send_photo(message.chat.id, exercise_image1, exercise_description1, reply_markup=markup)
     elif message.text == 'Есть гантели или гири':
         markup =types.ReplyKeyboardMarkup()
-        butn_back=types.KeyboardButton('Назад к типам упражнений')
+        butn_back=types.KeyboardButton('⬅️Назад к типам упражнений')
         markup.row(butn_back)
         exercise_images2 = exercise_manager.get_arms_exercise_image_by_availability(('2'))
         exercise_descriptions2 = exercise_manager.get_arms_exercise_description_by_availability(('2'))
@@ -543,7 +543,7 @@ def list_of_arms_exercises(message):
             bot.send_photo(message.chat.id, exercise_image2, exercise_description2, reply_markup=markup)
     elif message.text == 'Хожу в тренажерный зал':
         markup =types.ReplyKeyboardMarkup()
-        butn_back=types.KeyboardButton('Назад к типам упражнений')
+        butn_back=types.KeyboardButton('⬅️Назад к типам упражнений')
         markup.row(butn_back)
         exercise_images3 = exercise_manager.get_arms_exercise_image_by_availability(('3'))
         exercise_descriptions3 = exercise_manager.get_arms_exercise_description_by_availability(('3'))
@@ -555,7 +555,7 @@ def list_of_arms_exercises(message):
             z+=1
             bot.send_photo(message.chat.id, exercise_image3, exercise_description3, reply_markup=markup)
 
-    elif message.text == 'Назад к типам упражнений':
+    elif message.text == '⬅️Назад к типам упражнений':
         markup =types.ReplyKeyboardMarkup()
         butn1=types.KeyboardButton('Упражнения на ноги')
         butn2=types.KeyboardButton('Упражнения на спину')
@@ -564,18 +564,18 @@ def list_of_arms_exercises(message):
         butn5=types.KeyboardButton('Упражнения на руки')
         butn6=types.KeyboardButton('Упражнения на плечи')
         butn7=types.KeyboardButton('Кардио упражнения')
-        butn_back=types.KeyboardButton('Назад')
+        butn_back=types.KeyboardButton('⬅️Назад')
         markup.row(butn1, butn2)
         markup.row(butn3, butn4)
         markup.row(butn5, butn6)
         markup.row(butn7, butn_back)
-        bot.send_message(message.chat.id,'Назад к типам упражнений', reply_markup=markup)
+        bot.send_message(message.chat.id,'⬅️Назад к типам упражнений', reply_markup=markup)
 
 
 def list_of_shoulders_exercises(message):
     if message.text == 'Нет никакого инвентаря':
         markup =types.ReplyKeyboardMarkup()
-        butn_back=types.KeyboardButton('Назад к типам упражнений')
+        butn_back=types.KeyboardButton('⬅️Назад к типам упражнений')
         markup.row(butn_back)
         exercise_images1 = exercise_manager.get_shoulders_exercise_image_by_availability(('1'))
         exercise_descriptions1 = exercise_manager.get_shoulders_exercise_description_by_availability(('1'))
@@ -588,7 +588,7 @@ def list_of_shoulders_exercises(message):
             bot.send_photo(message.chat.id, exercise_image1, exercise_description1, reply_markup=markup)
     elif message.text == 'Есть гантели или гири':
         markup =types.ReplyKeyboardMarkup()
-        butn_back=types.KeyboardButton('Назад к типам упражнений')
+        butn_back=types.KeyboardButton('⬅️Назад к типам упражнений')
         markup.row(butn_back)
         exercise_images2 = exercise_manager.get_shoulders_exercise_image_by_availability(('2'))
         exercise_descriptions2 = exercise_manager.get_shoulders_exercise_description_by_availability(('2'))
@@ -601,7 +601,7 @@ def list_of_shoulders_exercises(message):
             bot.send_photo(message.chat.id, exercise_image2, exercise_description2, reply_markup=markup)
     elif message.text == 'Хожу в тренажерный зал':
         markup =types.ReplyKeyboardMarkup()
-        butn_back=types.KeyboardButton('Назад к типам упражнений')
+        butn_back=types.KeyboardButton('⬅️Назад к типам упражнений')
         markup.row(butn_back)
         exercise_images3 = exercise_manager.get_shoulders_exercise_image_by_availability(('3'))
         exercise_descriptions3 = exercise_manager.get_shoulders_exercise_description_by_availability(('3'))
@@ -613,7 +613,7 @@ def list_of_shoulders_exercises(message):
             z+=1
             bot.send_photo(message.chat.id, exercise_image3, exercise_description3, reply_markup=markup)
 
-    elif message.text == 'Назад к типам упражнений':
+    elif message.text == '⬅️Назад к типам упражнений':
         markup =types.ReplyKeyboardMarkup()
         butn1=types.KeyboardButton('Упражнения на ноги')
         butn2=types.KeyboardButton('Упражнения на спину')
@@ -622,12 +622,12 @@ def list_of_shoulders_exercises(message):
         butn5=types.KeyboardButton('Упражнения на руки')
         butn6=types.KeyboardButton('Упражнения на плечи')
         butn7=types.KeyboardButton('Кардио упражнения')
-        butn_back=types.KeyboardButton('Назад')
+        butn_back=types.KeyboardButton('⬅️Назад')
         markup.row(butn1, butn2)
         markup.row(butn3, butn4)
         markup.row(butn5, butn6)
         markup.row(butn7, butn_back)
-        bot.send_message(message.chat.id,'Назад к типам упражнений', reply_markup=markup)
+        bot.send_message(message.chat.id,'⬅️Назад к типам упражнений', reply_markup=markup)
 
 
 

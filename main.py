@@ -158,20 +158,61 @@ def start_menu(message):
     markup =types.ReplyKeyboardMarkup()
     butn1=types.KeyboardButton('Каталог упражнений')
     butn2=types.KeyboardButton('Информация о боте')
-    markup.row(butn1, butn2)
+    butn3=types.KeyboardButton('Расчитать суточную норму каллорий')
+    markup.row(butn1, butn3)
+    markup.row(butn2)
     welcome_text = 'Здравствуйте, этот бот - ваш персональный фитнесс ассистент, он сможет помочь вам в подборе тренировочного плана и упражнений'
     bot.send_message(message.chat.id, welcome_text, reply_markup=markup)
     
 @bot.message_handler(content_types=['text'])
 def aft_click1(message):
-
+# ---------------------------------------------------------------------
     if message.text == 'Информация о боте':
         markup =types.ReplyKeyboardMarkup()
         butn_back=types.KeyboardButton('⬅️Назад')
         bot_information_text = 'Здравствуйте, этот бот - ваш персональный фитнесс ассистент, он сможет помочь вам в подборе тренировочного плана и упражнений.\n\nЭтот бот создат в качестве итогового проекта, является всего лишь помощником и не гарантирует 100-процентного результата, если у вас имеются проблемы со здоровьем, то перед выполнением технически сложных упражнений рекомендуется проконсультироваться со специалистом.'
         markup.row(butn_back)
         bot.send_message(message.chat.id, bot_information_text, reply_markup=markup)
+# ---------------------------------------------------------------------
+    elif message.text == 'Расчитать суточную норму каллорий':
+        bsm = bot.send_message(message.chat.id, 'Введите ваш вес(в киллограмах):')
+        bot.register_next_step_handler(bsm, weight_step)
+        
+    elif message.text == 'Похудеть':
+        markup =types.ReplyKeyboardMarkup()
+        butn1=types.KeyboardButton('А зачем мне тренироваться?')
+        butn2=types.KeyboardButton('1-3 раз(а) в неделю')
+        butn3=types.KeyboardButton('3-5 раз(а) в неделю')
+        butn4=types.KeyboardButton('Интенсивно тренируюсь по 6-7 раз в неделю')
+        markup.row(butn1, butn2)
+        markup.row(butn3, butn4)
+        bot.send_message(message.chat.id, 'Насколько часто вы тренируетесь?', reply_markup=markup)
+        bot.register_next_step_handler(message, skinny)
 
+    elif message.text == 'Набрать мышечную массу':
+        markup =types.ReplyKeyboardMarkup()
+        butn1=types.KeyboardButton('А зачем мне тренироваться?')
+        butn2=types.KeyboardButton('1-3 раз(а) в неделю')
+        butn3=types.KeyboardButton('3-5 раз(а) в неделю')
+        butn4=types.KeyboardButton('Интенсивно тренируюсь по 6-7 раз в неделю')
+        markup.row(butn1, butn2)
+        markup.row(butn3, butn4)
+        bot.send_message(message.chat.id, 'Насколько часто вы тренируетесь?', reply_markup=markup)
+        bot.register_next_step_handler(message, mass)
+
+    elif message.text == 'Держать свое тело в форме':
+        markup =types.ReplyKeyboardMarkup()
+        butn1=types.KeyboardButton('А зачем мне тренироваться?')
+        butn2=types.KeyboardButton('1-3 раз(а) в неделю')
+        butn3=types.KeyboardButton('3-5 раз(а) в неделю')
+        butn4=types.KeyboardButton('Интенсивно тренируюсь по 6-7 раз в неделю')
+        markup.row(butn1, butn2)
+        markup.row(butn3, butn4)
+        bot.send_message(message.chat.id, 'Насколько часто вы тренируетесь?', reply_markup=markup)
+        bot.register_next_step_handler(message, normal)
+    
+
+# -------------------------------------------------------------------------------------------
     elif message.text == 'Каталог упражнений':
         markup =types.ReplyKeyboardMarkup()
         butn1=types.KeyboardButton('Упражнения на ноги')
@@ -192,7 +233,9 @@ def aft_click1(message):
         markup =types.ReplyKeyboardMarkup()
         butn1=types.KeyboardButton('Каталог упражнений')
         butn2=types.KeyboardButton('Информация о боте')
-        markup.row(butn1, butn2)
+        butn3=types.KeyboardButton('Расчитать суточную норму каллорий')
+        markup.row(butn1, butn3)
+        markup.row(butn2)
         bot.send_message(message.chat.id, '⬅️Назад', reply_markup=markup)
 
 
@@ -282,6 +325,302 @@ def aft_click1(message):
         bot.send_message(message.chat.id,'⬅️Назад к типам упражнений', reply_markup=markup)
 
 
+# -----------------------------------------------------------------
+def weight_step(message):
+    global user_weight
+    user_weight = float(message.text)
+    bsm = bot.send_message(message.chat.id, 'Введите ваш рост(в сантиметрах):')
+    bot.register_next_step_handler(bsm, height_step)
+
+def height_step(message):
+    global user_haight
+    user_haight = float(message.text)
+    bsm = bot.send_message(message.chat.id, 'Введите ваш возраст:')
+    bot.register_next_step_handler(bsm, age_step)
+    
+def age_step(message):
+    global user_age
+    user_age = float(message.text)
+    markup =types.ReplyKeyboardMarkup()
+    butn1=types.KeyboardButton('Похудеть')
+    butn2=types.KeyboardButton('Набрать мышечную массу')
+    butn3=types.KeyboardButton('Держать свое тело в форме')
+    markup.row(butn3, butn2, butn1)
+    bot.send_message(message.chat.id, 'Выберете свою цель:', reply_markup=markup)
+# --------------------------------------------------------------------------------------------------------------------
+    
+def skinny(message):
+    if message.text == 'А зачем мне тренироваться?':
+        markup =types.ReplyKeyboardMarkup()
+        butn1=types.KeyboardButton('Я мужчина')
+        butn2=types.KeyboardButton('Я женщина')
+        markup.row(butn1, butn2)
+        bot.send_message(message.chat.id, 'Выберете ваш пол:', reply_markup=markup)
+        bot.register_next_step_handler(message, skinny_1)
+
+    elif message.text == '1-3 раз(а) в неделю':
+        markup =types.ReplyKeyboardMarkup()
+        butn1=types.KeyboardButton('Я мужчина')
+        butn2=types.KeyboardButton('Я женщина')
+        markup.row(butn1, butn2)
+        bot.send_message(message.chat.id, 'Выберете ваш пол:', reply_markup=markup)
+        bot.register_next_step_handler(message, skinny_2)
+        
+    elif message.text == '3-5 раз(а) в неделю':
+        markup =types.ReplyKeyboardMarkup()
+        butn1=types.KeyboardButton('Я мужчина')
+        butn2=types.KeyboardButton('Я женщина')
+        markup.row(butn1, butn2)
+        bot.send_message(message.chat.id, 'Выберете ваш пол:', reply_markup=markup)
+        bot.register_next_step_handler(message, skinny_3)
+
+    elif message.text == 'Интенсивно тренируюсь по 6-7 раз в неделю':
+        markup =types.ReplyKeyboardMarkup()
+        butn1=types.KeyboardButton('Я мужчина')
+        butn2=types.KeyboardButton('Я женщина')
+        markup.row(butn1, butn2)
+        bot.send_message(message.chat.id, 'Выберете ваш пол:', reply_markup=markup)
+        bot.register_next_step_handler(message, skinny_4)
+
+def mass(message):
+    if message.text == 'А зачем мне тренироваться?':
+        markup =types.ReplyKeyboardMarkup()
+        butn1=types.KeyboardButton('Я мужчина')
+        butn2=types.KeyboardButton('Я женщина')
+        markup.row(butn1, butn2)
+        bot.send_message(message.chat.id, 'Выберете ваш пол:', reply_markup=markup)
+        bot.register_next_step_handler(message, mass_1)
+        
+    elif message.text == '1-3 раз(а) в неделю':
+        markup =types.ReplyKeyboardMarkup()
+        butn1=types.KeyboardButton('Я мужчина')
+        butn2=types.KeyboardButton('Я женщина')
+        markup.row(butn1, butn2)
+        bot.send_message(message.chat.id, 'Выберете ваш пол:', reply_markup=markup)
+        bot.register_next_step_handler(message, mass_2)
+        
+    elif message.text == '3-5 раз(а) в неделю':
+        markup =types.ReplyKeyboardMarkup()
+        butn1=types.KeyboardButton('Я мужчина')
+        butn2=types.KeyboardButton('Я женщина')
+        markup.row(butn1, butn2)
+        bot.send_message(message.chat.id, 'Выберете ваш пол:', reply_markup=markup)
+        bot.register_next_step_handler(message, mass_3)
+        
+    elif message.text == 'Интенсивно тренируюсь по 6-7 раз в неделю':
+        markup =types.ReplyKeyboardMarkup()
+        butn1=types.KeyboardButton('Я мужчина')
+        butn2=types.KeyboardButton('Я женщина')
+        markup.row(butn1, butn2)
+        bot.send_message(message.chat.id, 'Выберете ваш пол:', reply_markup=markup)
+        bot.register_next_step_handler(message, mass_4)
+
+def normal(message):
+    if message.text == 'А зачем мне тренироваться?':
+        markup =types.ReplyKeyboardMarkup()
+        butn1=types.KeyboardButton('Я мужчина')
+        butn2=types.KeyboardButton('Я женщина')
+        markup.row(butn1, butn2)
+        bot.send_message(message.chat.id, 'Выберете ваш пол:', reply_markup=markup)
+        bot.register_next_step_handler(message, normal_1)
+        
+    elif message.text == '1-3 раз(а) в неделю':
+        markup =types.ReplyKeyboardMarkup()
+        butn1=types.KeyboardButton('Я мужчина')
+        butn2=types.KeyboardButton('Я женщина')
+        markup.row(butn1, butn2)
+        bot.send_message(message.chat.id, 'Выберете ваш пол:', reply_markup=markup)
+        bot.register_next_step_handler(message, normal_2)
+        
+    elif message.text == '3-5 раз(а) в неделю':
+        markup =types.ReplyKeyboardMarkup()
+        butn1=types.KeyboardButton('Я мужчина')
+        butn2=types.KeyboardButton('Я женщина')
+        markup.row(butn1, butn2)
+        bot.send_message(message.chat.id, 'Выберете ваш пол:', reply_markup=markup)
+        bot.register_next_step_handler(message, normal_3)
+        
+    elif message.text == 'Интенсивно тренируюсь по 6-7 раз в неделю':
+        markup =types.ReplyKeyboardMarkup()
+        butn1=types.KeyboardButton('Я мужчина')
+        butn2=types.KeyboardButton('Я женщина')
+        markup.row(butn1, butn2)
+        bot.send_message(message.chat.id, 'Выберете ваш пол:', reply_markup=markup)
+        bot.register_next_step_handler(message, normal_4)
+        
+
+# --------------------------------------------------------------------------------------------------------------------
+                    
+def skinny_1(message):
+    if message.text =='Я мужчина':
+        markup =types.ReplyKeyboardMarkup()
+        butn_back=types.KeyboardButton('⬅️Назад')
+        markup.row(butn_back)
+        calories = ((88.36 + (13.4*user_weight)+(4.8*user_haight)-(5.7*user_age))*1.2)- 300
+        bot.send_message(message.chat.id, f'Рекомендованный калораж на день для вас - {calories}', reply_markup=markup)
+
+    elif message.text =='Я женщина':
+        markup =types.ReplyKeyboardMarkup()
+        butn_back=types.KeyboardButton('⬅️Назад')
+        markup.row(butn_back)
+        calories = ((447.6 + (9.2*user_weight)+(3.1*user_haight)-(4.3*user_age))*1.2)- 300
+        bot.send_message(message.chat.id, f'Рекомендованный калораж на день для вас - {calories}', reply_markup=markup)
+
+def skinny_2(message):
+    if message.text =='Я мужчина':
+        markup =types.ReplyKeyboardMarkup()
+        butn_back=types.KeyboardButton('⬅️Назад')
+        markup.row(butn_back)
+        calories = ((88.36 + (13.4*user_weight)+(4.8*user_haight)-(5.7*user_age))*1.375)- 300
+        bot.send_message(message.chat.id, f'Рекомендованный калораж на день для вас - {calories}', reply_markup=markup)
+    elif message.text =='Я женщина':
+        markup =types.ReplyKeyboardMarkup()
+        butn_back=types.KeyboardButton('⬅️Назад')
+        markup.row(butn_back)
+        calories = ((447.6 + (9.2*user_weight)+(3.1*user_haight)-(4.3*user_age))*1.375)- 300
+        bot.send_message(message.chat.id, f'Рекомендованный калораж на день для вас - {calories}', reply_markup=markup)    
+
+def skinny_3(message):
+    if message.text =='Я мужчина':
+        markup =types.ReplyKeyboardMarkup()
+        butn_back=types.KeyboardButton('⬅️Назад')
+        markup.row(butn_back)
+        calories = ((88.36 + (13.4*user_weight)+(4.8*user_haight)-(5.7*user_age))*1.55)- 300
+        bot.send_message(message.chat.id, f'Рекомендованный калораж на день для вас - {calories}', reply_markup=markup)
+    elif message.text =='Я женщина':
+        markup =types.ReplyKeyboardMarkup()
+        butn_back=types.KeyboardButton('⬅️Назад')
+        markup.row(butn_back)
+        calories = ((447.6 + (9.2*user_weight)+(3.1*user_haight)-(4.3*user_age))*1.55)- 300
+        bot.send_message(message.chat.id, f'Рекомендованный калораж на день для вас - {calories}', reply_markup=markup)
+
+def skinny_4(message):
+    if message.text =='Я мужчина':
+        markup =types.ReplyKeyboardMarkup()
+        butn_back=types.KeyboardButton('⬅️Назад')
+        markup.row(butn_back)
+        calories = ((88.36 + (13.4*user_weight)+(4.8*user_haight)-(5.7*user_age))*1.725)- 300
+        bot.send_message(message.chat.id, f'Рекомендованный калораж на день для вас - {calories}', reply_markup=markup)
+    elif message.text =='Я женщина':
+        markup =types.ReplyKeyboardMarkup()
+        butn_back=types.KeyboardButton('⬅️Назад')
+        markup.row(butn_back)
+        calories = ((447.6 + (9.2*user_weight)+(3.1*user_haight)-(4.3*user_age))*1.725)- 300
+        bot.send_message(message.chat.id, f'Рекомендованный калораж на день для вас - {calories}', reply_markup=markup)
+
+def mass_1(message):
+    if message.text =='Я мужчина':
+        markup =types.ReplyKeyboardMarkup()
+        butn_back=types.KeyboardButton('⬅️Назад')
+        markup.row(butn_back)
+        calories = ((88.36 + (13.4*user_weight)+(4.8*user_haight)-(5.7*user_age))*1.2)+400
+        bot.send_message(message.chat.id, f'Рекомендованный калораж на день для вас - {calories}', reply_markup=markup)
+    elif message.text =='Я женщина':
+        markup =types.ReplyKeyboardMarkup()
+        butn_back=types.KeyboardButton('⬅️Назад')
+        markup.row(butn_back)
+        calories = ((447.6 + (9.2*user_weight)+(3.1*user_haight)-(4.3*user_age))*1.2)+400
+        bot.send_message(message.chat.id, f'Рекомендованный калораж на день для вас - {calories}', reply_markup=markup)
+
+def mass_2(message):
+    if message.text =='Я мужчина':
+        markup =types.ReplyKeyboardMarkup()
+        butn_back=types.KeyboardButton('⬅️Назад')
+        markup.row(butn_back)
+        calories = ((88.36 + (13.4*user_weight)+(4.8*user_haight)-(5.7*user_age))*1.375)+400
+        bot.send_message(message.chat.id, f'Рекомендованный калораж на день для вас - {calories}', reply_markup=markup)
+    elif message.text =='Я женщина':
+        markup =types.ReplyKeyboardMarkup()
+        butn_back=types.KeyboardButton('⬅️Назад')
+        markup.row(butn_back)
+        calories = ((447.6 + (9.2*user_weight)+(3.1*user_haight)-(4.3*user_age))*1.375)+400
+        bot.send_message(message.chat.id, f'Рекомендованный калораж на день для вас - {calories}', reply_markup=markup)  
+
+def mass_3(message):
+    if message.text =='Я мужчина':
+        markup =types.ReplyKeyboardMarkup()
+        butn_back=types.KeyboardButton('⬅️Назад')
+        markup.row(butn_back)
+        calories = ((88.36 + (13.4*user_weight)+(4.8*user_haight)-(5.7*user_age))*1.55)+400
+        bot.send_message(message.chat.id, f'Рекомендованный калораж на день для вас - {calories}', reply_markup=markup)
+    elif message.text =='Я женщина':
+        markup =types.ReplyKeyboardMarkup()
+        butn_back=types.KeyboardButton('⬅️Назад')
+        markup.row(butn_back)
+        calories = ((447.6 + (9.2*user_weight)+(3.1*user_haight)-(4.3*user_age))*1.55)+400
+        bot.send_message(message.chat.id, f'Рекомендованный калораж на день для вас - {calories}', reply_markup=markup)  
+
+def mass_4(message):
+    if message.text =='Я мужчина':
+        markup =types.ReplyKeyboardMarkup()
+        butn_back=types.KeyboardButton('⬅️Назад')
+        markup.row(butn_back)
+        calories = ((88.36 + (13.4*user_weight)+(4.8*user_haight)-(5.7*user_age))*1.725)+400
+        bot.send_message(message.chat.id, f'Рекомендованный калораж на день для вас - {calories}')
+    elif message.text =='Я женщина':
+        markup =types.ReplyKeyboardMarkup()
+        butn_back=types.KeyboardButton('⬅️Назад')
+        markup.row(butn_back)
+        calories = ((447.6 + (9.2*user_weight)+(3.1*user_haight)-(4.3*user_age))*1.725)+400
+        bot.send_message(message.chat.id, f'Рекомендованный калораж на день для вас - {calories}')
+
+def normal_1(message):
+    if message.text =='Я мужчина':
+        markup =types.ReplyKeyboardMarkup()
+        butn_back=types.KeyboardButton('⬅️Назад')
+        markup.row(butn_back)
+        calories = ((88.36 + (13.4*user_weight)+(4.8*user_haight)-(5.7*user_age))*1.2)
+        bot.send_message(message.chat.id, f'Рекомендованный калораж на день для вас - {calories}', reply_markup=markup)
+    elif message.text =='Я женщина':
+        markup =types.ReplyKeyboardMarkup()
+        butn_back=types.KeyboardButton('⬅️Назад')
+        markup.row(butn_back)
+        calories = ((447.6 + (9.2*user_weight)+(3.1*user_haight)-(4.3*user_age))*1.2)
+        bot.send_message(message.chat.id, f'Рекомендованный калораж на день для вас - {calories}', reply_markup=markup)
+
+def normal_2(message):
+    if message.text =='Я мужчина':
+        markup =types.ReplyKeyboardMarkup()
+        butn_back=types.KeyboardButton('⬅️Назад')
+        markup.row(butn_back)
+        calories = ((88.36 + (13.4*user_weight)+(4.8*user_haight)-(5.7*user_age))*1.375)
+        bot.send_message(message.chat.id, f'Рекомендованный калораж на день для вас - {calories}', reply_markup=markup)
+    elif message.text =='Я женщина':
+        markup =types.ReplyKeyboardMarkup()
+        butn_back=types.KeyboardButton('⬅️Назад')
+        markup.row(butn_back)
+        calories = ((447.6 + (9.2*user_weight)+(3.1*user_haight)-(4.3*user_age))*1.375)
+        bot.send_message(message.chat.id, f'Рекомендованный калораж на день для вас - {calories}', reply_markup=markup)   
+
+def normal_3(message):
+    if message.text =='Я мужчина':
+        markup =types.ReplyKeyboardMarkup()
+        butn_back=types.KeyboardButton('⬅️Назад')
+        markup.row(butn_back)
+        calories = ((88.36 + (13.4*user_weight)+(4.8*user_haight)-(5.7*user_age))*1.55)
+        bot.send_message(message.chat.id, f'Рекомендованный калораж на день для вас - {calories}', reply_markup=markup)
+    elif message.text =='Я женщина':
+        markup =types.ReplyKeyboardMarkup()
+        butn_back=types.KeyboardButton('⬅️Назад')
+        markup.row(butn_back)
+        calories = ((447.6 + (9.2*user_weight)+(3.1*user_haight)-(4.3*user_age))*1.55)
+        bot.send_message(message.chat.id, f'Рекомендованный калораж на день для вас - {calories}', reply_markup=markup)
+
+def normal_4(message):
+    if message.text =='Я мужчина':
+        markup =types.ReplyKeyboardMarkup()
+        butn_back=types.KeyboardButton('⬅️Назад')
+        markup.row(butn_back)
+        calories = ((88.36 + (13.4*user_weight)+(4.8*user_haight)-(5.7*user_age))*1.725)
+        bot.send_message(message.chat.id, f'Рекомендованный калораж на день для вас - {calories}', reply_markup=markup)
+    elif message.text =='Я женщина':
+        markup =types.ReplyKeyboardMarkup()
+        butn_back=types.KeyboardButton('⬅️Назад')
+        markup.row(butn_back)
+        calories = ((447.6 + (9.2*user_weight)+(3.1*user_haight)-(4.3*user_age))*1.725)
+        bot.send_message(message.chat.id, f'Рекомендованный калораж на день для вас - {calories}', reply_markup=markup)
+
+# --------------------------------------------------------------------------------------------------------------------
 def list_of_legs_exercises(message):
     if message.text == 'Нет никакого инвентаря':
         markup =types.ReplyKeyboardMarkup()
@@ -634,7 +973,6 @@ def list_of_shoulders_exercises(message):
 bot.polling(none_stop= True)
 
                    
-
 
 
 

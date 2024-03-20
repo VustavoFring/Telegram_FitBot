@@ -93,6 +93,14 @@ class Exercise:
             return exercise_images
         else:
             return None
+    # Поиск изображений кардио упражнений
+    def get_cardio_exercise_image(self):
+        self.cur.execute("SELECT image FROM exercises_cardio")
+        exercise_images = self.cur.fetchall()
+        if exercise_images is not None:
+            return exercise_images
+        else:
+            return None
         
         
     # поиск описаний упражнений на ноги по "доступности"   
@@ -126,6 +134,10 @@ class Exercise:
         descriptions = self.cur.fetchall()
         return descriptions
     
+    def get_cardio_exercise_descriptions(self):
+        self.cur.execute("SELECT description FROM exercises_cardio")
+        descriptions = self.cur.fetchall()
+        return descriptions
 
 # ------------------------------------------------------
     
@@ -156,25 +168,33 @@ bot = telebot.TeleBot(token)
 @bot.message_handler(commands=['start'])
 def start_menu(message):
     markup =types.ReplyKeyboardMarkup()
-    butn1=types.KeyboardButton('Каталог упражнений')
-    butn2=types.KeyboardButton('Информация о боте')
-    butn3=types.KeyboardButton('Расчитать суточную норму каллорий')
+    butn1=types.KeyboardButton('📚 Каталог упражнений')
+    butn2=types.KeyboardButton('ℹ️ Информация о боте')
+    butn3=types.KeyboardButton('🥪 Расчитать суточную норму каллорий')
     markup.row(butn1, butn3)
     markup.row(butn2)
     welcome_text = 'Здравствуйте, этот бот - ваш персональный фитнесс ассистент, он сможет помочь вам в подборе тренировочного плана и упражнений'
     bot.send_message(message.chat.id, welcome_text, reply_markup=markup)
-    
+
+@bot.message_handler(commands=['help'])
+def inf_menu(message):
+    markup =types.ReplyKeyboardMarkup()
+    butn_back=types.KeyboardButton('⬅️Назад')
+    bot_information_text = 'Здравствуйте, этот бот - ваш персональный фитнесс ассистент, он сможет помочь вам в подборе тренировочного плана и упражнений.\n\nЭтот бот создат в качестве итогового проекта, является всего лишь помощником и не гарантирует 100-процентного результата, если у вас имеются проблемы со здоровьем, то перед выполнением технически сложных упражнений рекомендуется проконсультироваться со специалистом.'
+    markup.row(butn_back)
+    bot.send_message(message.chat.id, bot_information_text, reply_markup=markup)
+
 @bot.message_handler(content_types=['text'])
 def aft_click1(message):
 # ---------------------------------------------------------------------
-    if message.text == 'Информация о боте':
+    if message.text == 'ℹ️ Информация о боте':
         markup =types.ReplyKeyboardMarkup()
         butn_back=types.KeyboardButton('⬅️Назад')
         bot_information_text = 'Здравствуйте, этот бот - ваш персональный фитнесс ассистент, он сможет помочь вам в подборе тренировочного плана и упражнений.\n\nЭтот бот создат в качестве итогового проекта, является всего лишь помощником и не гарантирует 100-процентного результата, если у вас имеются проблемы со здоровьем, то перед выполнением технически сложных упражнений рекомендуется проконсультироваться со специалистом.'
         markup.row(butn_back)
         bot.send_message(message.chat.id, bot_information_text, reply_markup=markup)
 # ---------------------------------------------------------------------
-    elif message.text == 'Расчитать суточную норму каллорий':
+    elif message.text == '🥪 Расчитать суточную норму каллорий':
         bsm = bot.send_message(message.chat.id, 'Введите ваш вес(в киллограмах):')
         bot.register_next_step_handler(bsm, weight_step)
         
@@ -213,7 +233,7 @@ def aft_click1(message):
     
 
 # -------------------------------------------------------------------------------------------
-    elif message.text == 'Каталог упражнений':
+    elif message.text == '📚 Каталог упражнений':
         markup =types.ReplyKeyboardMarkup()
         butn1=types.KeyboardButton('Упражнения на ноги')
         butn2=types.KeyboardButton('Упражнения на спину')
@@ -231,9 +251,9 @@ def aft_click1(message):
 
     elif message.text == '⬅️Назад':
         markup =types.ReplyKeyboardMarkup()
-        butn1=types.KeyboardButton('Каталог упражнений')
-        butn2=types.KeyboardButton('Информация о боте')
-        butn3=types.KeyboardButton('Расчитать суточную норму каллорий')
+        butn1=types.KeyboardButton('📚 Каталог упражнений')
+        butn2=types.KeyboardButton('ℹ️ Информация о боте')
+        butn3=types.KeyboardButton('🥪 Расчитать суточную норму каллорий')
         markup.row(butn1, butn3)
         markup.row(butn2)
         bot.send_message(message.chat.id, '⬅️Назад', reply_markup=markup)
@@ -306,6 +326,26 @@ def aft_click1(message):
         bot.send_message(message.chat.id,'Выберите тип вашего инвентаря', reply_markup=markup)
         bot.register_next_step_handler(message, list_of_shoulders_exercises)
 
+    elif message.text == 'Кардио упражнения':
+        try:
+            markup =types.ReplyKeyboardMarkup()
+            butn_back=types.KeyboardButton('⬅️Назад к типам упражнений')
+            markup.row(butn_back)
+            exercise_images1 = exercise_manager.get_cardio_exercise_image()
+            exercise_descriptions1 = exercise_manager.get_cardio_exercise_descriptions()
+            x = 0
+            for i in exercise_images1:
+                exercise_image1 = i[0]
+                exercise_image1 = Image.open(io.BytesIO(exercise_image1))
+                exercise_description1 = exercise_descriptions1[x]
+                x+=1
+                bot.send_photo(message.chat.id, exercise_image1, exercise_description1, reply_markup=markup)
+        except Exception:
+            markup =types.ReplyKeyboardMarkup()
+            butn_back=types.KeyboardButton('⬅️Назад к типам упражнений')
+            markup.row(butn_back)
+            bot.send_message(message.chat.id, 'Что-то пошло не так', reply_markup=markup)
+
 
 
     elif message.text == '⬅️Назад к типам упражнений':
@@ -327,26 +367,46 @@ def aft_click1(message):
 
 # -----------------------------------------------------------------
 def weight_step(message):
-    global user_weight
-    user_weight = float(message.text)
-    bsm = bot.send_message(message.chat.id, 'Введите ваш рост(в сантиметрах):')
-    bot.register_next_step_handler(bsm, height_step)
+    try:
+        global user_weight
+        user_weight = float(message.text)
+        bsm = bot.send_message(message.chat.id, 'Введите ваш рост(в сантиметрах):')
+        bot.register_next_step_handler(bsm, height_step)
+    except Exception:
+        markup =types.ReplyKeyboardMarkup()
+        butn_back=types.KeyboardButton('⬅️Назад')
+        markup.row(butn_back)
+        bot.send_message(message.chat.id,'Похоже что вы ввели не число, вернитесь в меню', reply_markup=markup)
+
+
 
 def height_step(message):
-    global user_haight
-    user_haight = float(message.text)
-    bsm = bot.send_message(message.chat.id, 'Введите ваш возраст:')
-    bot.register_next_step_handler(bsm, age_step)
+    try:
+        global user_haight
+        user_haight = float(message.text)
+        bsm = bot.send_message(message.chat.id, 'Введите ваш возраст(в годах):')
+        bot.register_next_step_handler(bsm, age_step)
+    except Exception:
+        markup =types.ReplyKeyboardMarkup()
+        butn_back=types.KeyboardButton('⬅️Назад')
+        markup.row(butn_back)
+        bot.send_message(message.chat.id,'Похоже что вы ввели не число, вернитесь в меню', reply_markup=markup)
     
 def age_step(message):
-    global user_age
-    user_age = float(message.text)
-    markup =types.ReplyKeyboardMarkup()
-    butn1=types.KeyboardButton('Похудеть')
-    butn2=types.KeyboardButton('Набрать мышечную массу')
-    butn3=types.KeyboardButton('Держать свое тело в форме')
-    markup.row(butn3, butn2, butn1)
-    bot.send_message(message.chat.id, 'Выберете свою цель:', reply_markup=markup)
+    try:
+        global user_age
+        user_age = float(message.text)
+        markup =types.ReplyKeyboardMarkup()
+        butn1=types.KeyboardButton('Похудеть')
+        butn2=types.KeyboardButton('Набрать мышечную массу')
+        butn3=types.KeyboardButton('Держать свое тело в форме')
+        markup.row(butn3, butn2, butn1)
+        bot.send_message(message.chat.id, 'Выберете свою цель:', reply_markup=markup)
+    except Exception:
+        markup =types.ReplyKeyboardMarkup()
+        butn_back=types.KeyboardButton('⬅️Назад')
+        markup.row(butn_back)
+        bot.send_message(message.chat.id,'Похоже что вы ввели не число, вернитесь в меню', reply_markup=markup)
 # --------------------------------------------------------------------------------------------------------------------
     
 def skinny(message):
@@ -623,44 +683,62 @@ def normal_4(message):
 # --------------------------------------------------------------------------------------------------------------------
 def list_of_legs_exercises(message):
     if message.text == 'Нет никакого инвентаря':
-        markup =types.ReplyKeyboardMarkup()
-        butn_back=types.KeyboardButton('⬅️Назад к типам упражнений')
-        markup.row(butn_back)
-        exercise_images1 = exercise_manager.get_legs_exercise_image_by_availability(('1'))
-        exercise_descriptions1 = exercise_manager.get_legs_exercise_description_by_availability(('1'))
-        x = 0 
-        for i in exercise_images1:
-            exercise_image1 = i[0]
-            exercise_image1 = Image.open(io.BytesIO(exercise_image1))
-            exercise_description1 = exercise_descriptions1[x]
-            x+=1
-            bot.send_photo(message.chat.id, exercise_image1, exercise_description1, reply_markup=markup)
+        try:
+            markup =types.ReplyKeyboardMarkup()
+            butn_back=types.KeyboardButton('⬅️Назад к типам упражнений')
+            markup.row(butn_back)
+            exercise_images1 = exercise_manager.get_legs_exercise_image_by_availability(('1'))
+            exercise_descriptions1 = exercise_manager.get_legs_exercise_description_by_availability(('1'))
+            x = 0 
+            for i in exercise_images1:
+                exercise_image1 = i[0]
+                exercise_image1 = Image.open(io.BytesIO(exercise_image1))
+                exercise_description1 = exercise_descriptions1[x]
+                x+=1
+                bot.send_photo(message.chat.id, exercise_image1, exercise_description1, reply_markup=markup)
+        except Exception:
+            markup =types.ReplyKeyboardMarkup()
+            butn_back=types.KeyboardButton('⬅️Назад к типам упражнений')
+            markup.row(butn_back)
+            bot.send_message(message.chat.id, 'Что-то пошло не так', reply_markup=markup)        
     elif message.text == 'Есть гантели или гири':
-        markup =types.ReplyKeyboardMarkup()
-        butn_back=types.KeyboardButton('⬅️Назад к типам упражнений')
-        markup.row(butn_back)
-        exercise_images2 = exercise_manager.get_legs_exercise_image_by_availability(('2'))
-        exercise_descriptions2 = exercise_manager.get_legs_exercise_description_by_availability(('2'))
-        y = 0 
-        for i in exercise_images2:
-            exercise_image2 = i[0]
-            exercise_image2 = Image.open(io.BytesIO(exercise_image2))
-            exercise_description2 = exercise_descriptions2[y]
-            y+=1
-            bot.send_photo(message.chat.id, exercise_image2, exercise_description2, reply_markup=markup)
+        try:
+            markup =types.ReplyKeyboardMarkup()
+            butn_back=types.KeyboardButton('⬅️Назад к типам упражнений')
+            markup.row(butn_back)
+            exercise_images2 = exercise_manager.get_legs_exercise_image_by_availability(('2'))
+            exercise_descriptions2 = exercise_manager.get_legs_exercise_description_by_availability(('2'))
+            y = 0 
+            for i in exercise_images2:
+                exercise_image2 = i[0]
+                exercise_image2 = Image.open(io.BytesIO(exercise_image2))
+                exercise_description2 = exercise_descriptions2[y]
+                y+=1
+                bot.send_photo(message.chat.id, exercise_image2, exercise_description2, reply_markup=markup)
+        except Exception:
+            markup =types.ReplyKeyboardMarkup()
+            butn_back=types.KeyboardButton('⬅️Назад к типам упражнений')
+            markup.row(butn_back)
+            bot.send_message(message.chat.id, 'Что-то пошло не так', reply_markup=markup)
     elif message.text == 'Хожу в тренажерный зал':
-        markup =types.ReplyKeyboardMarkup()
-        butn_back=types.KeyboardButton('⬅️Назад к типам упражнений')
-        markup.row(butn_back)
-        exercise_images3 = exercise_manager.get_legs_exercise_image_by_availability(('3'))
-        exercise_descriptions3 = exercise_manager.get_legs_exercise_description_by_availability(('3'))
-        z = 0 
-        for i in exercise_images3:
-            exercise_image3 = i[0]
-            exercise_image3 = Image.open(io.BytesIO(exercise_image3))
-            exercise_description3 = exercise_descriptions3[z]
-            z+=1
-            bot.send_photo(message.chat.id, exercise_image3, exercise_description3, reply_markup=markup)
+        try:
+            markup =types.ReplyKeyboardMarkup()
+            butn_back=types.KeyboardButton('⬅️Назад к типам упражнений')
+            markup.row(butn_back)
+            exercise_images3 = exercise_manager.get_legs_exercise_image_by_availability(('3'))
+            exercise_descriptions3 = exercise_manager.get_legs_exercise_description_by_availability(('3'))
+            z = 0 
+            for i in exercise_images3:
+                exercise_image3 = i[0]
+                exercise_image3 = Image.open(io.BytesIO(exercise_image3))
+                exercise_description3 = exercise_descriptions3[z]
+                z+=1
+                bot.send_photo(message.chat.id, exercise_image3, exercise_description3, reply_markup=markup)
+        except Exception:
+            markup =types.ReplyKeyboardMarkup()
+            butn_back=types.KeyboardButton('⬅️Назад к типам упражнений')
+            markup.row(butn_back)
+            bot.send_message(message.chat.id, 'Что-то пошло не так', reply_markup=markup)
 
     elif message.text == '⬅️Назад к типам упражнений':
         markup =types.ReplyKeyboardMarkup()
@@ -681,44 +759,62 @@ def list_of_legs_exercises(message):
 
 def list_of_back_exercises(message):
     if message.text == 'Нет никакого инвентаря':
-        markup =types.ReplyKeyboardMarkup()
-        butn_back=types.KeyboardButton('⬅️Назад к типам упражнений')
-        markup.row(butn_back)
-        exercise_images1 = exercise_manager.get_back_exercise_image_by_availability(('1'))
-        exercise_descriptions1 = exercise_manager.get_back_exercise_description_by_availability(('1'))
-        x = 0 
-        for i in exercise_images1:
-            exercise_image1 = i[0]
-            exercise_image1 = Image.open(io.BytesIO(exercise_image1))
-            exercise_description1 = exercise_descriptions1[x]
-            x+=1
-            bot.send_photo(message.chat.id, exercise_image1, exercise_description1, reply_markup=markup)
+        try:
+            markup =types.ReplyKeyboardMarkup()
+            butn_back=types.KeyboardButton('⬅️Назад к типам упражнений')
+            markup.row(butn_back)
+            exercise_images1 = exercise_manager.get_back_exercise_image_by_availability(('1'))
+            exercise_descriptions1 = exercise_manager.get_back_exercise_description_by_availability(('1'))
+            x = 0 
+            for i in exercise_images1:
+                exercise_image1 = i[0]
+                exercise_image1 = Image.open(io.BytesIO(exercise_image1))
+                exercise_description1 = exercise_descriptions1[x]
+                x+=1
+                bot.send_photo(message.chat.id, exercise_image1, exercise_description1, reply_markup=markup)
+        except Exception:
+            markup =types.ReplyKeyboardMarkup()
+            butn_back=types.KeyboardButton('⬅️Назад к типам упражнений')
+            markup.row(butn_back)
+            bot.send_message(message.chat.id, 'Что-то пошло не так', reply_markup=markup)    
     elif message.text == 'Есть гантели или гири':
-        markup =types.ReplyKeyboardMarkup()
-        butn_back=types.KeyboardButton('⬅️Назад к типам упражнений')
-        markup.row(butn_back)
-        exercise_images2 = exercise_manager.get_back_exercise_image_by_availability(('2'))
-        exercise_descriptions2 = exercise_manager.get_back_exercise_description_by_availability(('2'))
-        y = 0 
-        for i in exercise_images2:
-            exercise_image2 = i[0]
-            exercise_image2 = Image.open(io.BytesIO(exercise_image2))
-            exercise_description2 = exercise_descriptions2[y]
-            y+=1
-            bot.send_photo(message.chat.id, exercise_image2, exercise_description2, reply_markup=markup)
+        try:
+            markup =types.ReplyKeyboardMarkup()
+            butn_back=types.KeyboardButton('⬅️Назад к типам упражнений')
+            markup.row(butn_back)
+            exercise_images2 = exercise_manager.get_back_exercise_image_by_availability(('2'))
+            exercise_descriptions2 = exercise_manager.get_back_exercise_description_by_availability(('2'))
+            y = 0 
+            for i in exercise_images2:
+                exercise_image2 = i[0]
+                exercise_image2 = Image.open(io.BytesIO(exercise_image2))
+                exercise_description2 = exercise_descriptions2[y]
+                y+=1
+                bot.send_photo(message.chat.id, exercise_image2, exercise_description2, reply_markup=markup)
+        except Exception:
+            markup =types.ReplyKeyboardMarkup()
+            butn_back=types.KeyboardButton('⬅️Назад к типам упражнений')
+            markup.row(butn_back)
+            bot.send_message(message.chat.id, 'Что-то пошло не так', reply_markup=markup)
     elif message.text == 'Хожу в тренажерный зал':
-        markup =types.ReplyKeyboardMarkup()
-        butn_back=types.KeyboardButton('⬅️Назад к типам упражнений')
-        markup.row(butn_back)
-        exercise_images3 = exercise_manager.get_back_exercise_image_by_availability(('3'))
-        exercise_descriptions3 = exercise_manager.get_back_exercise_description_by_availability(('3'))
-        z = 0 
-        for i in exercise_images3:
-            exercise_image3 = i[0]
-            exercise_image3 = Image.open(io.BytesIO(exercise_image3))
-            exercise_description3 = exercise_descriptions3[z]
-            z+=1
-            bot.send_photo(message.chat.id, exercise_image3, exercise_description3, reply_markup=markup)
+        try:
+            markup =types.ReplyKeyboardMarkup()
+            butn_back=types.KeyboardButton('⬅️Назад к типам упражнений')
+            markup.row(butn_back)
+            exercise_images3 = exercise_manager.get_back_exercise_image_by_availability(('3'))
+            exercise_descriptions3 = exercise_manager.get_back_exercise_description_by_availability(('3'))
+            z = 0 
+            for i in exercise_images3:
+                exercise_image3 = i[0]
+                exercise_image3 = Image.open(io.BytesIO(exercise_image3))
+                exercise_description3 = exercise_descriptions3[z]
+                z+=1
+                bot.send_photo(message.chat.id, exercise_image3, exercise_description3, reply_markup=markup)
+        except Exception:
+            markup =types.ReplyKeyboardMarkup()
+            butn_back=types.KeyboardButton('⬅️Назад к типам упражнений')
+            markup.row(butn_back)
+            bot.send_message(message.chat.id, 'Что-то пошло не так', reply_markup=markup)
 
     elif message.text == '⬅️Назад к типам упражнений':
         markup =types.ReplyKeyboardMarkup()
@@ -739,44 +835,63 @@ def list_of_back_exercises(message):
 
 def list_of_core_exercises(message):
     if message.text == 'Нет никакого инвентаря':
-        markup =types.ReplyKeyboardMarkup()
-        butn_back=types.KeyboardButton('⬅️Назад к типам упражнений')
-        markup.row(butn_back)
-        exercise_images1 = exercise_manager.get_core_exercise_image_by_availability(('1'))
-        exercise_descriptions1 = exercise_manager.get_core_exercise_description_by_availability(('1'))
-        x = 0 
-        for i in exercise_images1:
-            exercise_image1 = i[0]
-            exercise_image1 = Image.open(io.BytesIO(exercise_image1))
-            exercise_description1 = exercise_descriptions1[x]
-            x+=1
-            bot.send_photo(message.chat.id, exercise_image1, exercise_description1, reply_markup=markup)
+        try:
+            markup =types.ReplyKeyboardMarkup()
+            butn_back=types.KeyboardButton('⬅️Назад к типам упражнений')
+            markup.row(butn_back)
+            exercise_images1 = exercise_manager.get_core_exercise_image_by_availability(('1'))
+            exercise_descriptions1 = exercise_manager.get_core_exercise_description_by_availability(('1'))
+            x = 0 
+            for i in exercise_images1:
+                exercise_image1 = i[0]
+                exercise_image1 = Image.open(io.BytesIO(exercise_image1))
+                exercise_description1 = exercise_descriptions1[x]
+                x+=1
+                bot.send_photo(message.chat.id, exercise_image1, exercise_description1, reply_markup=markup)
+        except Exception:
+            markup =types.ReplyKeyboardMarkup()
+            butn_back=types.KeyboardButton('⬅️Назад к типам упражнений')
+            markup.row(butn_back)
+            bot.send_message(message.chat.id, 'Что-то пошло не так', reply_markup=markup)
+
     elif message.text == 'Есть гантели или гири':
-        markup =types.ReplyKeyboardMarkup()
-        butn_back=types.KeyboardButton('⬅️Назад к типам упражнений')
-        markup.row(butn_back)
-        exercise_images2 = exercise_manager.get_core_exercise_image_by_availability(('2'))
-        exercise_descriptions2 = exercise_manager.get_core_exercise_description_by_availability(('2'))
-        y = 0 
-        for i in exercise_images2:
-            exercise_image2 = i[0]
-            exercise_image2 = Image.open(io.BytesIO(exercise_image2))
-            exercise_description2 = exercise_descriptions2[y]
-            y+=1
-            bot.send_photo(message.chat.id, exercise_image2, exercise_description2, reply_markup=markup)
+        try:
+            markup =types.ReplyKeyboardMarkup()
+            butn_back=types.KeyboardButton('⬅️Назад к типам упражнений')
+            markup.row(butn_back)
+            exercise_images2 = exercise_manager.get_core_exercise_image_by_availability(('2'))
+            exercise_descriptions2 = exercise_manager.get_core_exercise_description_by_availability(('2'))
+            y = 0 
+            for i in exercise_images2:
+                exercise_image2 = i[0]
+                exercise_image2 = Image.open(io.BytesIO(exercise_image2))
+                exercise_description2 = exercise_descriptions2[y]
+                y+=1
+                bot.send_photo(message.chat.id, exercise_image2, exercise_description2, reply_markup=markup)
+        except Exception:
+            markup =types.ReplyKeyboardMarkup()
+            butn_back=types.KeyboardButton('⬅️Назад к типам упражнений')
+            markup.row(butn_back)
+            bot.send_message(message.chat.id, 'Что-то пошло не так', reply_markup=markup)
     elif message.text == 'Хожу в тренажерный зал':
-        markup =types.ReplyKeyboardMarkup()
-        butn_back=types.KeyboardButton('⬅️Назад к типам упражнений')
-        markup.row(butn_back)
-        exercise_images3 = exercise_manager.get_core_exercise_image_by_availability(('3'))
-        exercise_descriptions3 = exercise_manager.get_core_exercise_description_by_availability(('3'))
-        z = 0 
-        for i in exercise_images3:
-            exercise_image3 = i[0]
-            exercise_image3 = Image.open(io.BytesIO(exercise_image3))
-            exercise_description3 = exercise_descriptions3[z]
-            z+=1
-            bot.send_photo(message.chat.id, exercise_image3, exercise_description3, reply_markup=markup)
+        try:
+            markup =types.ReplyKeyboardMarkup()
+            butn_back=types.KeyboardButton('⬅️Назад к типам упражнений')
+            markup.row(butn_back)
+            exercise_images3 = exercise_manager.get_core_exercise_image_by_availability(('3'))
+            exercise_descriptions3 = exercise_manager.get_core_exercise_description_by_availability(('3'))
+            z = 0 
+            for i in exercise_images3:
+                exercise_image3 = i[0]
+                exercise_image3 = Image.open(io.BytesIO(exercise_image3))
+                exercise_description3 = exercise_descriptions3[z]
+                z+=1
+                bot.send_photo(message.chat.id, exercise_image3, exercise_description3, reply_markup=markup)
+        except Exception:
+            markup =types.ReplyKeyboardMarkup()
+            butn_back=types.KeyboardButton('⬅️Назад к типам упражнений')
+            markup.row(butn_back)
+            bot.send_message(message.chat.id, 'Что-то пошло не так', reply_markup=markup)
 
     elif message.text == '⬅️Назад к типам упражнений':
         markup =types.ReplyKeyboardMarkup()
@@ -797,44 +912,62 @@ def list_of_core_exercises(message):
 
 def list_of_chest_exercises(message):
     if message.text == 'Нет никакого инвентаря':
-        markup =types.ReplyKeyboardMarkup()
-        butn_back=types.KeyboardButton('⬅️Назад к типам упражнений')
-        markup.row(butn_back)
-        exercise_images1 = exercise_manager.get_chest_exercise_image_by_availability(('1'))
-        exercise_descriptions1 = exercise_manager.get_chest_exercise_description_by_availability(('1'))
-        x = 0 
-        for i in exercise_images1:
-            exercise_image1 = i[0]
-            exercise_image1 = Image.open(io.BytesIO(exercise_image1))
-            exercise_description1 = exercise_descriptions1[x]
-            x+=1
-            bot.send_photo(message.chat.id, exercise_image1, exercise_description1, reply_markup=markup)
+        try:
+            markup =types.ReplyKeyboardMarkup()
+            butn_back=types.KeyboardButton('⬅️Назад к типам упражнений')
+            markup.row(butn_back)
+            exercise_images1 = exercise_manager.get_chest_exercise_image_by_availability(('1'))
+            exercise_descriptions1 = exercise_manager.get_chest_exercise_description_by_availability(('1'))
+            x = 0 
+            for i in exercise_images1:
+                exercise_image1 = i[0]
+                exercise_image1 = Image.open(io.BytesIO(exercise_image1))
+                exercise_description1 = exercise_descriptions1[x]
+                x+=1
+                bot.send_photo(message.chat.id, exercise_image1, exercise_description1, reply_markup=markup)
+        except Exception:
+            markup =types.ReplyKeyboardMarkup()
+            butn_back=types.KeyboardButton('⬅️Назад к типам упражнений')
+            markup.row(butn_back)
+            bot.send_message(message.chat.id, 'Что-то пошло не так', reply_markup=markup)
     elif message.text == 'Есть гантели или гири':
-        markup =types.ReplyKeyboardMarkup()
-        butn_back=types.KeyboardButton('⬅️Назад к типам упражнений')
-        markup.row(butn_back)
-        exercise_images2 = exercise_manager.get_chest_exercise_image_by_availability(('2'))
-        exercise_descriptions2 = exercise_manager.get_chest_exercise_description_by_availability(('2'))
-        y = 0 
-        for i in exercise_images2:
-            exercise_image2 = i[0]
-            exercise_image2 = Image.open(io.BytesIO(exercise_image2))
-            exercise_description2 = exercise_descriptions2[y]
-            y+=1
-            bot.send_photo(message.chat.id, exercise_image2, exercise_description2, reply_markup=markup)
+        try:
+            markup =types.ReplyKeyboardMarkup()
+            butn_back=types.KeyboardButton('⬅️Назад к типам упражнений')
+            markup.row(butn_back)
+            exercise_images2 = exercise_manager.get_chest_exercise_image_by_availability(('2'))
+            exercise_descriptions2 = exercise_manager.get_chest_exercise_description_by_availability(('2'))
+            y = 0 
+            for i in exercise_images2:
+                exercise_image2 = i[0]
+                exercise_image2 = Image.open(io.BytesIO(exercise_image2))
+                exercise_description2 = exercise_descriptions2[y]
+                y+=1
+                bot.send_photo(message.chat.id, exercise_image2, exercise_description2, reply_markup=markup)
+        except Exception:
+            markup =types.ReplyKeyboardMarkup()
+            butn_back=types.KeyboardButton('⬅️Назад к типам упражнений')
+            markup.row(butn_back)
+            bot.send_message(message.chat.id, 'Что-то пошло не так', reply_markup=markup)
     elif message.text == 'Хожу в тренажерный зал':
-        markup =types.ReplyKeyboardMarkup()
-        butn_back=types.KeyboardButton('⬅️Назад к типам упражнений')
-        markup.row(butn_back)
-        exercise_images3 = exercise_manager.get_chest_exercise_image_by_availability(('3'))
-        exercise_descriptions3 = exercise_manager.get_chest_exercise_description_by_availability(('3'))
-        z = 0 
-        for i in exercise_images3:
-            exercise_image3 = i[0]
-            exercise_image3 = Image.open(io.BytesIO(exercise_image3))
-            exercise_description3 = exercise_descriptions3[z]
-            z+=1
-            bot.send_photo(message.chat.id, exercise_image3, exercise_description3, reply_markup=markup)
+        try:
+            markup =types.ReplyKeyboardMarkup()
+            butn_back=types.KeyboardButton('⬅️Назад к типам упражнений')
+            markup.row(butn_back)
+            exercise_images3 = exercise_manager.get_chest_exercise_image_by_availability(('3'))
+            exercise_descriptions3 = exercise_manager.get_chest_exercise_description_by_availability(('3'))
+            z = 0 
+            for i in exercise_images3:
+                exercise_image3 = i[0]
+                exercise_image3 = Image.open(io.BytesIO(exercise_image3))
+                exercise_description3 = exercise_descriptions3[z]
+                z+=1
+                bot.send_photo(message.chat.id, exercise_image3, exercise_description3, reply_markup=markup)
+        except Exception:
+            markup =types.ReplyKeyboardMarkup()
+            butn_back=types.KeyboardButton('⬅️Назад к типам упражнений')
+            markup.row(butn_back)
+            bot.send_message(message.chat.id, 'Что-то пошло не так', reply_markup=markup)
 
     elif message.text == '⬅️Назад к типам упражнений':
         markup =types.ReplyKeyboardMarkup()
@@ -855,44 +988,62 @@ def list_of_chest_exercises(message):
 
 def list_of_arms_exercises(message):
     if message.text == 'Нет никакого инвентаря':
-        markup =types.ReplyKeyboardMarkup()
-        butn_back=types.KeyboardButton('⬅️Назад к типам упражнений')
-        markup.row(butn_back)
-        exercise_images1 = exercise_manager.get_arms_exercise_image_by_availability(('1'))
-        exercise_descriptions1 = exercise_manager.get_arms_exercise_description_by_availability(('1'))
-        x = 0 
-        for i in exercise_images1:
-            exercise_image1 = i[0]
-            exercise_image1 = Image.open(io.BytesIO(exercise_image1))
-            exercise_description1 = exercise_descriptions1[x]
-            x+=1
-            bot.send_photo(message.chat.id, exercise_image1, exercise_description1, reply_markup=markup)
+        try:
+            markup =types.ReplyKeyboardMarkup()
+            butn_back=types.KeyboardButton('⬅️Назад к типам упражнений')
+            markup.row(butn_back)
+            exercise_images1 = exercise_manager.get_arms_exercise_image_by_availability(('1'))
+            exercise_descriptions1 = exercise_manager.get_arms_exercise_description_by_availability(('1'))
+            x = 0 
+            for i in exercise_images1:
+                exercise_image1 = i[0]
+                exercise_image1 = Image.open(io.BytesIO(exercise_image1))
+                exercise_description1 = exercise_descriptions1[x]
+                x+=1
+                bot.send_photo(message.chat.id, exercise_image1, exercise_description1, reply_markup=markup)
+        except Exception:
+            markup =types.ReplyKeyboardMarkup()
+            butn_back=types.KeyboardButton('⬅️Назад к типам упражнений')
+            markup.row(butn_back)
+            bot.send_message(message.chat.id, 'Что-то пошло не так', reply_markup=markup)
     elif message.text == 'Есть гантели или гири':
-        markup =types.ReplyKeyboardMarkup()
-        butn_back=types.KeyboardButton('⬅️Назад к типам упражнений')
-        markup.row(butn_back)
-        exercise_images2 = exercise_manager.get_arms_exercise_image_by_availability(('2'))
-        exercise_descriptions2 = exercise_manager.get_arms_exercise_description_by_availability(('2'))
-        y = 0 
-        for i in exercise_images2:
-            exercise_image2 = i[0]
-            exercise_image2 = Image.open(io.BytesIO(exercise_image2))
-            exercise_description2 = exercise_descriptions2[y]
-            y+=1
-            bot.send_photo(message.chat.id, exercise_image2, exercise_description2, reply_markup=markup)
+        try:
+            markup =types.ReplyKeyboardMarkup()
+            butn_back=types.KeyboardButton('⬅️Назад к типам упражнений')
+            markup.row(butn_back)
+            exercise_images2 = exercise_manager.get_arms_exercise_image_by_availability(('2'))
+            exercise_descriptions2 = exercise_manager.get_arms_exercise_description_by_availability(('2'))
+            y = 0 
+            for i in exercise_images2:
+                exercise_image2 = i[0]
+                exercise_image2 = Image.open(io.BytesIO(exercise_image2))
+                exercise_description2 = exercise_descriptions2[y]
+                y+=1
+                bot.send_photo(message.chat.id, exercise_image2, exercise_description2, reply_markup=markup)
+        except Exception:
+            markup =types.ReplyKeyboardMarkup()
+            butn_back=types.KeyboardButton('⬅️Назад к типам упражнений')
+            markup.row(butn_back)
+            bot.send_message(message.chat.id, 'Что-то пошло не так', reply_markup=markup)
     elif message.text == 'Хожу в тренажерный зал':
-        markup =types.ReplyKeyboardMarkup()
-        butn_back=types.KeyboardButton('⬅️Назад к типам упражнений')
-        markup.row(butn_back)
-        exercise_images3 = exercise_manager.get_arms_exercise_image_by_availability(('3'))
-        exercise_descriptions3 = exercise_manager.get_arms_exercise_description_by_availability(('3'))
-        z = 0 
-        for i in exercise_images3:
-            exercise_image3 = i[0]
-            exercise_image3 = Image.open(io.BytesIO(exercise_image3))
-            exercise_description3 = exercise_descriptions3[z]
-            z+=1
-            bot.send_photo(message.chat.id, exercise_image3, exercise_description3, reply_markup=markup)
+        try:
+            markup =types.ReplyKeyboardMarkup()
+            butn_back=types.KeyboardButton('⬅️Назад к типам упражнений')
+            markup.row(butn_back)
+            exercise_images3 = exercise_manager.get_arms_exercise_image_by_availability(('3'))
+            exercise_descriptions3 = exercise_manager.get_arms_exercise_description_by_availability(('3'))
+            z = 0 
+            for i in exercise_images3:
+                exercise_image3 = i[0]
+                exercise_image3 = Image.open(io.BytesIO(exercise_image3))
+                exercise_description3 = exercise_descriptions3[z]
+                z+=1
+                bot.send_photo(message.chat.id, exercise_image3, exercise_description3, reply_markup=markup)
+        except Exception:
+            markup =types.ReplyKeyboardMarkup()
+            butn_back=types.KeyboardButton('⬅️Назад к типам упражнений')
+            markup.row(butn_back)
+            bot.send_message(message.chat.id, 'Что-то пошло не так', reply_markup=markup)
 
     elif message.text == '⬅️Назад к типам упражнений':
         markup =types.ReplyKeyboardMarkup()
@@ -913,44 +1064,62 @@ def list_of_arms_exercises(message):
 
 def list_of_shoulders_exercises(message):
     if message.text == 'Нет никакого инвентаря':
-        markup =types.ReplyKeyboardMarkup()
-        butn_back=types.KeyboardButton('⬅️Назад к типам упражнений')
-        markup.row(butn_back)
-        exercise_images1 = exercise_manager.get_shoulders_exercise_image_by_availability(('1'))
-        exercise_descriptions1 = exercise_manager.get_shoulders_exercise_description_by_availability(('1'))
-        x = 0 
-        for i in exercise_images1:
-            exercise_image1 = i[0]
-            exercise_image1 = Image.open(io.BytesIO(exercise_image1))
-            exercise_description1 = exercise_descriptions1[x]
-            x+=1
-            bot.send_photo(message.chat.id, exercise_image1, exercise_description1, reply_markup=markup)
+        try:
+            markup =types.ReplyKeyboardMarkup()
+            butn_back=types.KeyboardButton('⬅️Назад к типам упражнений')
+            markup.row(butn_back)
+            exercise_images1 = exercise_manager.get_shoulders_exercise_image_by_availability(('1'))
+            exercise_descriptions1 = exercise_manager.get_shoulders_exercise_description_by_availability(('1'))
+            x = 0 
+            for i in exercise_images1:
+                exercise_image1 = i[0]
+                exercise_image1 = Image.open(io.BytesIO(exercise_image1))
+                exercise_description1 = exercise_descriptions1[x]
+                x+=1
+                bot.send_photo(message.chat.id, exercise_image1, exercise_description1, reply_markup=markup)
+        except Exception:
+            markup =types.ReplyKeyboardMarkup()
+            butn_back=types.KeyboardButton('⬅️Назад к типам упражнений')
+            markup.row(butn_back)
+            bot.send_message(message.chat.id, 'Что-то пошло не так', reply_markup=markup)
     elif message.text == 'Есть гантели или гири':
-        markup =types.ReplyKeyboardMarkup()
-        butn_back=types.KeyboardButton('⬅️Назад к типам упражнений')
-        markup.row(butn_back)
-        exercise_images2 = exercise_manager.get_shoulders_exercise_image_by_availability(('2'))
-        exercise_descriptions2 = exercise_manager.get_shoulders_exercise_description_by_availability(('2'))
-        y = 0 
-        for i in exercise_images2:
-            exercise_image2 = i[0]
-            exercise_image2 = Image.open(io.BytesIO(exercise_image2))
-            exercise_description2 = exercise_descriptions2[y]
-            y+=1
-            bot.send_photo(message.chat.id, exercise_image2, exercise_description2, reply_markup=markup)
+        try:
+            markup =types.ReplyKeyboardMarkup()
+            butn_back=types.KeyboardButton('⬅️Назад к типам упражнений')
+            markup.row(butn_back)
+            exercise_images2 = exercise_manager.get_shoulders_exercise_image_by_availability(('2'))
+            exercise_descriptions2 = exercise_manager.get_shoulders_exercise_description_by_availability(('2'))
+            y = 0 
+            for i in exercise_images2:
+                exercise_image2 = i[0]
+                exercise_image2 = Image.open(io.BytesIO(exercise_image2))
+                exercise_description2 = exercise_descriptions2[y]
+                y+=1
+                bot.send_photo(message.chat.id, exercise_image2, exercise_description2, reply_markup=markup)
+        except Exception:
+            markup =types.ReplyKeyboardMarkup()
+            butn_back=types.KeyboardButton('⬅️Назад к типам упражнений')
+            markup.row(butn_back)
+            bot.send_message(message.chat.id, 'Что-то пошло не так', reply_markup=markup)
     elif message.text == 'Хожу в тренажерный зал':
-        markup =types.ReplyKeyboardMarkup()
-        butn_back=types.KeyboardButton('⬅️Назад к типам упражнений')
-        markup.row(butn_back)
-        exercise_images3 = exercise_manager.get_shoulders_exercise_image_by_availability(('3'))
-        exercise_descriptions3 = exercise_manager.get_shoulders_exercise_description_by_availability(('3'))
-        z = 0 
-        for i in exercise_images3:
-            exercise_image3 = i[0]
-            exercise_image3 = Image.open(io.BytesIO(exercise_image3))
-            exercise_description3 = exercise_descriptions3[z]
-            z+=1
-            bot.send_photo(message.chat.id, exercise_image3, exercise_description3, reply_markup=markup)
+        try:
+            markup =types.ReplyKeyboardMarkup()
+            butn_back=types.KeyboardButton('⬅️Назад к типам упражнений')
+            markup.row(butn_back)
+            exercise_images3 = exercise_manager.get_shoulders_exercise_image_by_availability(('3'))
+            exercise_descriptions3 = exercise_manager.get_shoulders_exercise_description_by_availability(('3'))
+            z = 0 
+            for i in exercise_images3:
+                exercise_image3 = i[0]
+                exercise_image3 = Image.open(io.BytesIO(exercise_image3))
+                exercise_description3 = exercise_descriptions3[z]
+                z+=1
+                bot.send_photo(message.chat.id, exercise_image3, exercise_description3, reply_markup=markup)
+        except Exception:
+            markup =types.ReplyKeyboardMarkup()
+            butn_back=types.KeyboardButton('⬅️Назад к типам упражнений')
+            markup.row(butn_back)
+            bot.send_message(message.chat.id, 'Что-то пошло не так', reply_markup=markup)
 
     elif message.text == '⬅️Назад к типам упражнений':
         markup =types.ReplyKeyboardMarkup()

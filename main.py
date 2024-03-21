@@ -678,13 +678,13 @@ def mass_4(message):
         butn_back=types.KeyboardButton('⬅️Назад')
         markup.row(butn_back)
         calories = ((88.36 + (13.4*user_weight)+(4.8*user_haight)-(5.7*user_age))*1.725)+400
-        bot.send_message(message.chat.id, f'Рекомендованный калораж на день для вас - {calories} калорий \n\nУчитывайте что важно также следить за балансом белков, жиров и углеводов в организме. Среднее хорошее соотношение этих нутриентов: белки - 30%, жиры - 30%, углеводы - 40%. Удачи!')
+        bot.send_message(message.chat.id, f'Рекомендованный калораж на день для вас - {calories} калорий \n\nУчитывайте что важно также следить за балансом белков, жиров и углеводов в организме. Среднее хорошее соотношение этих нутриентов: белки - 30%, жиры - 30%, углеводы - 40%. Удачи!', reply_markup=markup)
     elif message.text =='Я женщина':
         markup =types.ReplyKeyboardMarkup()
         butn_back=types.KeyboardButton('⬅️Назад')
         markup.row(butn_back)
         calories = ((447.6 + (9.2*user_weight)+(3.1*user_haight)-(4.3*user_age))*1.725)+400
-        bot.send_message(message.chat.id, f'Рекомендованный калораж на день для вас - {calories} калорий \n\nУчитывайте что важно также следить за балансом белков, жиров и углеводов в организме. Среднее хорошее соотношение этих нутриентов: белки - 30%, жиры - 30%, углеводы - 40%. Удачи!')
+        bot.send_message(message.chat.id, f'Рекомендованный калораж на день для вас - {calories} калорий \n\nУчитывайте что важно также следить за балансом белков, жиров и углеводов в организме. Среднее хорошее соотношение этих нутриентов: белки - 30%, жиры - 30%, углеводы - 40%. Удачи!', reply_markup=markup)
 
     else:
         markup =types.ReplyKeyboardMarkup()

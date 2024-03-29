@@ -1,5 +1,6 @@
 import telebot 
 from telebot import types
+import time
 import sqlite3
 from PIL import Image
 import io
@@ -10,41 +11,6 @@ class Exercise:
         self.cur = self.conn.cursor()
 
 # ---------------------------------------------------------------------------------------
-        
-    def get_legs_exercise_image_by_id(self, exercise_id):
-        self.cur.execute("SELECT image FROM exercises_legs WHERE id=?", (exercise_id))
-        exercise_image = self.cur.fetchone()
-    
-        if exercise_image is not None:
-            image_data = exercise_image[0]
-            image = Image.open(io.BytesIO(image_data))
-            return image
-        else:
-            return None
-    
-    def get_back_exercise_image_by_id(self, exercise_id):
-        self.cur.execute("SELECT image FROM exercises_back WHERE id=?", (exercise_id))
-        exercise_image = self.cur.fetchone()
-    
-        if exercise_image is not None:
-            image_data = exercise_image[0]
-            image = Image.open(io.BytesIO(image_data))
-            return image
-        else:
-            return None
-    
-    def get_legs_exercise_description_by_id(self, exercise_id):
-        self.cur.execute("SELECT description FROM exercises_legs WHERE id=?", (exercise_id))
-        description = self.cur.fetchone()
-        return description
-    
-    def get_back_exercise_description_by_id(self, exercise_id):
-        self.cur.execute("SELECT description FROM exercises_back WHERE id=?", (exercise_id))
-        description = self.cur.fetchone()
-        return description
-    
-    # -------------------------------------
-
     # поиск изображений упражнений на ноги по "доступности"
     def get_legs_exercise_image_by_availability(self, exercise_availability):
         self.cur.execute("SELECT image FROM exercises_legs WHERE availability == ?", (exercise_availability))
@@ -139,22 +105,6 @@ class Exercise:
         descriptions = self.cur.fetchall()
         return descriptions
 
-# ------------------------------------------------------
-    
-    def add_exercise(self, title, image, description, group_muscle, difficulty, availability, energy_cost):
-        self.cur.execute("INSERT INTO exercises(title, image, description, group_muscle, difficulty, availability,) VALUES (?, ?, ?, ?, ?, ?, ?)", (title, image, description, group_muscle, difficulty, availability, energy_cost))
-        self.conn.commit()
-
-    def update_exercise(self, exercise_id, title, image, description, group_muscle, difficulty, availability, energy_cost):
-        self.cur.execute("UPDATE exercises SET title=?, image=?, description=?, group_muscle=?, difficulty=?, availability=? WHERE id=?", (title, image, description, group_muscle, difficulty, availability, energy_cost, exercise_id))
-        self.conn.commit()
-
-    def delete_exercise(self, exercise_id):
-        self.cur.execute("DELETE FROM exercises WHERE id=?", (exercise_id,))
-        self.conn.commit()
-
-    def close_connection(self):
-        self.conn.close()
 # ---------------------------------------------------------------------------
 
 
@@ -1260,25 +1210,15 @@ def list_of_shoulders_exercises(message):
         markup.row(butn_back)
         bot.send_message(message.chat.id,'Похоже что вы ввели не то значение, вернитесь назад', reply_markup=markup)
 
-bot.polling(none_stop= True)
+if __name__ == '__main__':
+    while True:
+        try:
+            bot.polling(none_stop=True)
+        except Exception as e:
+            time.sleep(3)
+            print(e)
 
                    
-
-
-
-
-# поле экспериментов
-    
-# exercise_image = exercise_manager.get_exercise_image_by_id(1)
-# exercise_description = exercise_manager.get_exercise_description_by_id(1)
-# @bot.message_handler(commands=['image'])
-
-# def image_message(message):
-#     image = exercise_image
-#     description = exercise_description
-#     bot.send_photo(message.chat.id, image, description)
-
-# поле экспериментов
 
 
 # циклирование работы бота

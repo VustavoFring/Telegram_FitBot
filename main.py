@@ -283,6 +283,7 @@ def aft_click1(message):
             markup.row(butn_back)
             exercise_images1 = exercise_manager.get_cardio_exercise_image()
             exercise_descriptions1 = exercise_manager.get_cardio_exercise_descriptions()
+            bot.send_message(message.chst.id, 'Этот раздел еще дополняется', reply_markup=markup)
             x = 0
             for i in exercise_images1:
                 exercise_image1 = i[0]
@@ -290,7 +291,6 @@ def aft_click1(message):
                 exercise_description1 = exercise_descriptions1[x]
                 x+=1
                 bot.send_photo(message.chat.id, exercise_image1, exercise_description1, reply_markup=markup)
-            bot.send_message(message.chst.id, 'Этот раздел еще дополняется')
         except Exception:
             markup =types.ReplyKeyboardMarkup()
             butn_back=types.KeyboardButton('⬅️Назад к типам упражнений')

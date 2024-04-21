@@ -290,6 +290,7 @@ def aft_click1(message):
                 exercise_description1 = exercise_descriptions1[x]
                 x+=1
                 bot.send_photo(message.chat.id, exercise_image1, exercise_description1, reply_markup=markup)
+            bot.send_message(message.chst.id, 'Этот раздел еще дополняется')
         except Exception:
             markup =types.ReplyKeyboardMarkup()
             butn_back=types.KeyboardButton('⬅️Назад к типам упражнений')
@@ -1209,6 +1210,8 @@ def list_of_shoulders_exercises(message):
         butn_back=types.KeyboardButton('⬅️Назад к типам упражнений')
         markup.row(butn_back)
         bot.send_message(message.chat.id,'Похоже что вы ввели не то значение, вернитесь назад', reply_markup=markup)
+
+# обработка падений бота
 
 if __name__ == '__main__':
     while True:

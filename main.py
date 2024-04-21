@@ -283,7 +283,6 @@ def aft_click1(message):
             markup.row(butn_back)
             exercise_images1 = exercise_manager.get_cardio_exercise_image()
             exercise_descriptions1 = exercise_manager.get_cardio_exercise_descriptions()
-            bot.send_message(message.chst.id, 'Этот раздел еще дополняется', reply_markup=markup)
             x = 0
             for i in exercise_images1:
                 exercise_image1 = i[0]

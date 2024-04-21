@@ -294,7 +294,7 @@ def aft_click1(message):
             markup =types.ReplyKeyboardMarkup()
             butn_back=types.KeyboardButton('⬅️Назад к типам упражнений')
             markup.row(butn_back)
-            bot.send_message(message.chat.id, 'Что-то пошло не так', reply_markup=markup)
+            bot.send_message(message.chat.id, 'Этот раздел дорабатывается', reply_markup=markup)
 
 
 

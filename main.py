@@ -277,18 +277,24 @@ def aft_click1(message):
         bot.register_next_step_handler(message, list_of_shoulders_exercises)
 
     elif message.text == 'Кардио упражнения':
-        markup =types.ReplyKeyboardMarkup()
-        butn_back=types.KeyboardButton('⬅️Назад к типам упражнений')
-        markup.row(butn_back)
-        exercise_images1 = exercise_manager.get_cardio_exercise_image()
-        exercise_descriptions1 = exercise_manager.get_cardio_exercise_descriptions()
-        x = 0
-        for i in exercise_images1:
-            exercise_image1 = i[0]
-            exercise_image1 = Image.open(io.BytesIO(exercise_image1))
-            exercise_description1 = exercise_descriptions1[x]
-            x+=1
-            bot.send_photo(message.chat.id, exercise_image1, exercise_description1, reply_markup=markup)
+        try:
+            markup =types.ReplyKeyboardMarkup()
+            butn_back=types.KeyboardButton('⬅️Назад к типам упражнений')
+            markup.row(butn_back)
+            exercise_images1 = exercise_manager.get_cardio_exercise_image()
+            exercise_descriptions1 = exercise_manager.get_cardio_exercise_descriptions()
+            x = 0
+            for i in exercise_images1:
+                exercise_image1 = i[0]
+                exercise_image1 = Image.open(io.BytesIO(exercise_image1))
+                exercise_description1 = exercise_descriptions1[x]
+                x+=1
+                bot.send_photo(message.chat.id, exercise_image1, exercise_description1, reply_markup=markup)
+        except Exception:
+            markup =types.ReplyKeyboardMarkup()
+            butn_back=types.KeyboardButton('⬅️Назад к типам упражнений')
+            markup.row(butn_back)
+            bot.send_message(message.chat.id, 'Что-то пошло не так', reply_markup=markup)
 
 
 
